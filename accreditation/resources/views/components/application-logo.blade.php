@@ -1,0 +1,1 @@
+<img src="{{ asset('storage/images/psu_logo.png') }}" alt="PSU Logo">
