@@ -9,6 +9,7 @@ use App\Models\Member;
 use App\Models\AreaMember;
 use App\Models\User;
 use App\Models\Area;
+use App\Models\AccreditationArea;
 use DB;
 
 class Roles
@@ -107,14 +108,14 @@ class MemberController extends Controller
 
         $program_id = Accreditation::join('program_levels', 'accreditations.program_level_id', '=', 'program_levels.id')->join('programs', 'program_levels.program_id', '=', 'programs.id')->select('programs.id as prog_id')->where('accreditations.id', $id)->first();
 
-        $areas = Area::join('instruments', 'areas.instrument_id', '=', 'instruments.id')->join('programs', 'instruments.program_id', '=', 'programs.id')->select('areas.*', 'areas.id as aid', 'instruments.*')->where('instruments.program_id', $program_id->prog_id)->OrderBy('areas.area_name')->get();
+        $acc_areas = Area::join('instruments', 'areas.instrument_id', '=', 'instruments.id')->join('programs', 'instruments.program_id', '=', 'programs.id')->join('accreditation_areas', 'areas.id', '=', 'accreditation_areas.area_id')->select('areas.*', 'areas.id as aid', 'instruments.*', 'accreditation_areas.id as acc_areaId')->where('instruments.program_id', $program_id->prog_id)->where('accreditation_areas.accreditation_id', $id)->OrderBy('areas.area_name')->get();
+        
+        $areas = Area::join('instruments', 'areas.instrument_id', '=', 'instruments.id')->join('programs', 'instruments.program_id', '=', 'programs.id')->leftjoin('accreditation_areas', 'areas.id', '=', 'accreditation_areas.area_id')->select('areas.*', 'areas.id as aid', 'instruments.*')->where('instruments.program_id', $program_id->prog_id)->OrderBy('areas.area_name')->get();
 
         $roles = new Roles();
         if(Auth::user()->user_type == 'user'){
             $member = Member::select('*')->where('user_id', $uid)->first();
             $roles->isCoordinator= $member->isCoordination;
-            $roles->isAreachair = $member->isAreachair;
-            $roles->isAreamember = $member->isAreamember;
             $roles->isExternal = $member->isExternal;
             $roles->isInternal = $member->isInternal;
         }
@@ -125,9 +126,43 @@ class MemberController extends Controller
         ->where('area_members.accreditation_id', $id)
         ->get();
 
-
         $unfilteredUser = User::join('campuses', 'users.campus_id', '=', 'campuses.id')->join('programs', 'users.program_id', '=', 'programs.id')->select('users.*', 'users.id as user_id', 'campuses.id as campus_id', 'campuses.name as campus_name', 'programs.program as program')->where('user_type', '!=', 'admin')->get();
-        return view('admin.manage_member')->with('members', $members)->with('id', $id)->with('users', $users)->with('roles', $roles)->with('areas', $areas)->with('unfilteredUser', $unfilteredUser)->with('area_members',$area_members);
+
+        return view('admin.manage_member')->with('members', $members)->with('id', $id)->with('users', $users)->with('roles', $roles)->with('acc_areas', $acc_areas)->with('areas', $areas)->with('unfilteredUser', $unfilteredUser)->with('area_members',$area_members);
+    }
+
+    public function addArea(Request $request)
+    {
+        $id = $request->input('acc_id');
+        $areas = $request->input('area');
+        foreach($areas as $area)
+        {
+            $accArea = new AccreditationArea;
+            $accArea->accreditation_id=$id;
+            $accArea->area_id =$area;
+            $accArea->save();
+        }
+        if ($accArea) {
+            // Add a flash message to indicate successful deletion
+            session()->flash('success', 'Area Added successfully.');
+        } else {
+            // Add a flash message to indicate that the record was not found
+            session()->flash('error', 'Something went wrong, please try again.');
+        }
+        return redirect()->route('admin.manage_member.show', ['id' => $id]);
+    }
+    public function removeArea($id)
+    {
+        $area = AccreditationArea::find($id);
+        if ($area) {
+            // Add a flash message to indicate successful deletion
+            $area->delete();
+            session()->flash('success', 'Area Removed successfully.');
+        } else {
+            // Add a flash message to indicate that the record was not found
+            session()->flash('error', 'Something went wrong, please try again.');
+        }
+        return redirect()->back();
     }
 
     /**

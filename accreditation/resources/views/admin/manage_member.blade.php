@@ -191,23 +191,6 @@
                                     <div id="externalError"  class="invalid-feedback">
                                         @error('external') <p>Please select a role.</p> @enderror
                                     </div>
-
-                                    <hr>
-                                    <div class="form-check">
-                                        <input type="radio" id="area_chair" name="areachair" value="0" class="form-check-input @error('areachair') is-invalid @enderror" {{$member->isAreachair == 1 ? 'checked' : ''}}>
-                                        <label for="area_chair" class="form-check-label">Area Chair</label>
-                                    </div>
-                                    <div id="areachairError" class="invalid-feedback">
-                                        @error('areachair') <p>Please select a role.</p> @enderror
-                                    </div>
-                                    
-                                    <div class="form-check">
-                                        <input type="radio" id="area_member" name="areachair" value="1" class="form-check-input @error('areamember') is-invalid @enderror" {{$member->isAreamember == 1 ? 'checked' : ''}}>
-                                        <label for="area_member" class="form-check-label">Area Member</label>
-                                    </div>
-                                    <div id="areamemberError"  class="invalid-feedback">
-                                        @error('areamember') <p>Please select a role.</p> @enderror
-                                    </div>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -233,19 +216,35 @@
         <div id="no_results" style="display: none;">
             <center>User doesn't exist</center>
         </div>
+        <div class="py-4">
+
+        </div>
         <div class="row">
-            @forelse($areas AS $area)
+            <div class="col-4 mx-auto">
+                <center><p class="card-text fs-2">Select Area to Tackle</p></center>
+                <button class="btn btn-outline-secondary w-100" data-bs-toggle="modal" data-bs-target="#areaModal">SELECT AREA</button>
+            </div>
+        </div>
+        <div class="row mx-auto">
+            @forelse($acc_areas AS $area)
             <div class="col-lg-4 col-md-6 col-sm-12 p-2">
                 <div class="card">
-                    <div class="card-header">
-                        {{ $area->area_name }}: {{ $area->area_title }}
-                    </div>
-                    <div class="card-body">
+                    <div class="card-header bg bg-primary">
                         <div class="row">
-                            <div class="col">
+                            <div class="col-11">
+                                <b>{{ $area->area_name }}: {{ $area->area_title }}</b>
+                            </div>
+                            <div class="col-1 text-end">
+                                <a href="/remove_area/{{$area->acc_areaId}}"><i class="fa-solid fa-xmark fa-lg"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body" style="height: 400px; overflow-y:auto">
+                        <div class="row">
+                            <div class="col-8">
                                 <h5 class="card-title">Area Chair/s</h5>
                             </div>
-                            <div class="col text end">
+                            <div class="col-4">
                                 <button class="btn btn-outline-primary"  data-bs-toggle="modal" data-bs-target="#addAreaMemberModal{{$area->aid}}">Add Area Char</button>
                             </div>
                         </div>
@@ -260,7 +259,7 @@
                                 @forelse($area_members as $member)
                                     @if($member->area_id == $area->aid && $member->member_type == 'chair')
                                     <tr>
-                                        <td>{{$member->lname}} {{$member->fname}}</td>
+                                        <td><b>{{$member->lname}} {{$member->fname}}</b></td>
                                         <td><button class="btn btn-outline-primary">Type</button></td>
                                     </tr>
                                     @endif
@@ -272,7 +271,7 @@
                         <div class="m-3">
                             <hr>
                         </div>
-                        <div class="row">
+                        <div class="row justify-content-between">
                             <div class="col">
                                 <h5 class="card-title">Area Member/s</h5>
                             </div>
@@ -288,7 +287,7 @@
                                 @forelse($area_members as $member)
                                     @if($member->area_id == $area->aid && $member->member_type == 'member')
                                     <tr>
-                                        <td>{{$member->lname}} {{$member->fname}}</td>
+                                        <td><b>{{$member->lname}} {{$member->fname}}</b></td>
                                         <td><button class="btn btn-outline-primary">Type</button></td>
                                     </tr>
                                     @endif
@@ -327,8 +326,8 @@
                                         <tr class="list-group-item list-group-item-action list-group-item-light">
                                             <td>
                                                 <div class="form-check">
-                                                    <input type="checkbox" name="members[]" class="form-check-input" value="{{$user->id}}" id="{{$user->id}}" >
-                                                    <label class="form-check-label" for="{{$user->user_id}}"><b class="fs-5">{{$user->lastname}} {{$user->firstname}}</b> <span class="fs-6">({{$user->campus_name}})</span>
+                                                    <input type="checkbox" name="members[]" class="form-check-input" value="{{$user->id}}" id="area{{$user->id}}" >
+                                                    <label class="form-check-label" for="area{{$user->user_id}}{{$area->aid}}"><b class="fs-5">{{$user->lastname}} {{$user->firstname}}</b> <span class="fs-6">({{$user->campus_name}})</span>
                                                     <p class="fs-6">{{$user->program}}</p>
                                                     </label>
                                                 </div>
@@ -352,8 +351,43 @@
               </div>
             </div>
             @empty
-                <p class="card-text">No areas found.</p>
+                <div class="col-4 py-5 mx-auto">
+                </div>
             @endforelse
+            <!-- AREAS Modal -->
+            <div class="modal fade" id="areaModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel"><b></b></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="/add_area" method="POST">
+                        <div class="modal-body">
+                            @csrf
+                            <input type="hidden" name="id" value="{{$id}}">
+                            <div class="form-group py-2">
+                                @forelse($areas as $area)
+                                    <div class="form-check">
+                                        <input type="checkbox" id="acc{{$area->aid}}area" name="area[]" value="{{$area->aid}}" class="form-check-input @error('{{$area->aid}}') is-invalid @enderror">
+                                        <label for="acc{{$area->aid}}area" class="form-check-label">{{$area->area_name}}: {{$area->area_title}}</label>
+                                    </div>
+                                    <div id="coordinatorError"  class="invalid-feedback">
+                                        @error('coordinator') <p>Please select a role.</p> @enderror
+                                    </div>
+                                @empty
+                                @endforelse
+                            </div>
+                            <input type="hidden" name="acc_id" value="{{$id}}">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-outline-primary">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+                </div>
+            </div>
         </div>
     </div>
 </x-app-layout>

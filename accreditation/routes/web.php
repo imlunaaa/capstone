@@ -147,6 +147,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('view_subindicator_file/{id}', [SubIndicatorFileController::class, 'show']);
 
     Route::post('add_area_member', [AreaMemberController::class, 'store'])->name('add_area_members');
+
+    Route::post('add_area', [MemberController::class, 'addArea']);
+    Route::get('remove_area/{id}', [MemberController::class, 'removeArea']);
 });
 
 Route::middleware(['auth'])->group(function () {

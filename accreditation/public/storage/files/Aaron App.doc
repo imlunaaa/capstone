@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <style>
+    <!--
+     /* Font Definitions */
+     @font-face
+        {font-family:Wingdings;
+        panose-1:5 0 0 0 0 0 0 0 0 0;}
+    @font-face
+        {font-family:"Cambria Math";
+        panose-1:2 4 5 3 5 4 6 3 2 4;}
+    @font-face
+        {font-family:Calibri;
+        panose-1:2 15 5 2 2 2 4 3 2 4;}
+    @font-face
+        {font-family:Tahoma;
+        panose-1:2 11 6 4 3 5 4 4 2 4;}
+     /* Style Definitions */
+     p.MsoNormal, li.MsoNormal, div.MsoNormal
+        {margin-top:0in;
+        margin-right:0in;
+        margin-bottom:12.0pt;
+        margin-left:0in;
+        line-height:115%;
+        font-size:11.0pt;
+        font-family:"Calibri",sans-serif;}
+    p.MsoHeader, li.MsoHeader, div.MsoHeader
+        {margin-top:0in;
+        margin-right:0in;
+        margin-bottom:24.0pt;
+        margin-left:0in;
+        line-height:115%;
+        font-size:11.0pt;
+        font-family:"Calibri",sans-serif;}
+    p.MsoHeaderCxSpFirst, li.MsoHeaderCxSpFirst, div.MsoHeaderCxSpFirst
+        {margin:0in;
+        line-height:115%;
+        font-size:11.0pt;
+        font-family:"Calibri",sans-serif;}
+    p.MsoHeaderCxSpMiddle, li.MsoHeaderCxSpMiddle, div.MsoHeaderCxSpMiddle
+        {margin:0in;
+        line-height:115%;
+        font-size:11.0pt;
+        font-family:"Calibri",sans-serif;}
+    p.MsoHeaderCxSpLast, li.MsoHeaderCxSpLast, div.MsoHeaderCxSpLast
+        {margin-top:0in;
+        margin-right:0in;
+        margin-bottom:24.0pt;
+        margin-left:0in;
+        line-height:115%;
+        font-size:11.0pt;
+        font-family:"Calibri",sans-serif;}
+    p.MsoSignature, li.MsoSignature, div.MsoSignature
+        {mso-style-link:"Signature Char";
+        margin-top:0in;
+        margin-right:0in;
+        margin-bottom:12.0pt;
+        margin-left:0in;
+        line-height:115%;
+        font-size:11.0pt;
+        font-family:"Calibri",sans-serif;}
+    p.MsoSignatureCxSpFirst, li.MsoSignatureCxSpFirst, div.MsoSignatureCxSpFirst
+        {mso-style-link:"Signature Char";
+        margin:0in;
+        line-height:115%;
+        font-size:11.0pt;
+        font-family:"Calibri",sans-serif;}
+    p.MsoSignatureCxSpMiddle, li.MsoSignatureCxSpMiddle, div.MsoSignatureCxSpMiddle
+        {mso-style-link:"Signature Char";
+        margin:0in;
+        line-height:115%;
+        font-size:11.0pt;
+        font-family:"Calibri",sans-serif;}
+    p.MsoSignatureCxSpLast, li.MsoSignatureCxSpLast, div.MsoSignatureCxSpLast
+        {mso-style-link:"Signature Char";
+        margin-top:0in;
+        margin-right:0in;
+        margin-bottom:12.0pt;
+        margin-left:0in;
+        line-height:115%;
+        font-size:11.0pt;
+        font-family:"Calibri",sans-serif;}
+    p.ContactInfo, li.ContactInfo, div.ContactInfo
+        {mso-style-name:"Contact Info";
+        margin:0in;
+        line-height:115%;
+        font-size:11.0pt;
+        font-family:"Calibri",sans-serif;}
+    span.SignatureChar
+        {mso-style-name:"Signature Char";
+        mso-style-link:Signature;}
+    .MsoPapDefault
+        {margin-bottom:12.0pt;
+        line-height:115%;}
+     /* Page Definitions */
+     @page WordSection1
+        {size:8.5in 11.0in;
+        margin:1.5in 1.25in 1.0in 1.25in;}
+    div.WordSection1
+        {page:WordSection1;}
+     /* List Definitions */
+     ol
+        {margin-bottom:0in;}
+    ul
+        {margin-bottom:0in;}
+    -->
+    </style>  
+</head>
+    <body>
+                <html xmlns:v="urn:schemas-microsoft-com:vml" 
+        xmlns:o="urn:schemas-microsoft-com:office:office" 
+        xmlns:w="urn:schemas-microsoft-com:office:word" 
+        xmlns="http://www.w3.org/TR/REC-html40"> 
+         
+        <head> 
+        <meta http-equiv=Content-Type content="text/html; charset=utf-8"> 
+        <meta name=ProgId content=Word.Document> 
+        <meta name=Generator content="Microsoft Word 9"> 
+        <meta name=Originator content="Microsoft Word 9"> 
+        <!--[if !mso]> 
+        <style> 
+        v\:* {behavior:url(#default#VML);} 
+        o\:* {behavior:url(#default#VML);} 
+        w\:* {behavior:url(#default#VML);} 
+        .shape {behavior:url(#default#VML);} 
+        </style> 
+        <![endif]--> 
+        <title></title> 
+        <!--[if gte mso 9]><xml> 
+         <w:WordDocument> 
+          <w:View>Print</w:View> 
+          <w:DoNotHyphenateCaps/> 
+          <w:PunctuationKerning/> 
+          <w:DrawingGridHorizontalSpacing>9.35 pt</w:DrawingGridHorizontalSpacing> 
+          <w:DrawingGridVerticalSpacing>9.35 pt</w:DrawingGridVerticalSpacing> 
+         </w:WordDocument> 
+        </xml><![endif]--> 
+        <style> 
+        <!-- 
+         /* Font Definitions */ 
+        @font-face 
+            {font-family:Verdana; 
+            panose-1:2 11 6 4 3 5 4 4 2 4; 
+            mso-font-charset:0; 
+            mso-generic-font-family:swiss; 
+            mso-font-pitch:variable; 
+            mso-font-signature:536871559 0 0 0 415 0;} 
+         /* Style Definitions */ 
+        p.MsoNormal, li.MsoNormal, div.MsoNormal 
+            {mso-style-parent:""; 
+            margin:0in; 
+            margin-bottom:.0001pt; 
+            mso-pagination:widow-orphan; 
+            font-size:7.5pt; 
+                mso-bidi-font-size:8.0pt; 
+            font-family:"Verdana"; 
+            mso-fareast-font-family:"Verdana";} 
+        p.small 
+            {mso-style-parent:""; 
+            margin:0in; 
+            margin-bottom:.0001pt; 
+            mso-pagination:widow-orphan; 
+            font-size:1.0pt; 
+                mso-bidi-font-size:1.0pt; 
+            font-family:"Verdana"; 
+            mso-fareast-font-family:"Verdana";} 
+        @page Section1 
+            {size:8.5in 11.0in; 
+            margin:1.0in 1.25in 1.0in 1.25in; 
+            mso-header-margin:.5in; 
+            mso-footer-margin:.5in; 
+            mso-paper-source:0;} 
+        div.Section1 
+            {page:Section1;} 
+        --> 
+        </style> 
+        <!--[if gte mso 9]><xml> 
+         <o:shapedefaults v:ext="edit" spidmax="1032"> 
+          <o:colormenu v:ext="edit" strokecolor="none"/> 
+         </o:shapedefaults></xml><![endif]--><!--[if gte mso 9]><xml> 
+         <o:shapelayout v:ext="edit"> 
+          <o:idmap v:ext="edit" data="1"/> 
+         </o:shapelayout></xml><![endif]--> 
+          
+        </head> 
+        <body> <div class=WordSection1>
+
+                <p class=ContactInfo style='line-height:normal'><a name="_Hlk124790955"></a><b><span
+                style='font-size:16.0pt'>Aaron Lopez</span></b></p>
+
+                <p class=ContactInfo style='line-height:normal'><span style='font-size:16.0pt'>San Roque, San Manuel, Pangasinan</span></p>
+
+                <p class=ContactInfo style='line-height:normal'><span style='font-size:16.0pt'>09957937970</span></p>
+
+                <p class=ContactInfo style='line-height:normal'><span style='font-size:16.0pt'>aaron.espiritulopez07@gmail.com</span></p>
+
+                <p class=ContactInfo style='line-height:normal'><span style='font-size:16.0pt'>&nbsp;</span></p>
+
+                <p class=ContactInfo style='line-height:normal'><span style='font-size:16.0pt'>2023-09-11</span></p>
+
+                <p class=ContactInfo style='line-height:normal'><span style='font-size:16.0pt'>&nbsp;</span></p>
+
+                <p class=ContactInfo style='line-height:normal'><span style='font-size:16.0pt'>Gil Lopez</span></p>
+
+                <p class=ContactInfo style='line-height:normal'><span style='font-size:16.0pt'>ABC COMPANY</span></p>
+
+                <p class=ContactInfo style='line-height:normal'><span style='font-size:16.0pt'>Quezon City</span></p>
+
+                <p class=ContactInfo style='line-height:normal'><span style='font-size:16.0pt'>&nbsp;</span></p>
+
+                <p class=ContactInfo style='line-height:normal'><span style='font-size:16.0pt'>Dear
+                <b>Gil</b>:</span></p>
+
+                <p class=ContactInfo style='line-height:normal'><span style='font-size:16.0pt'>&nbsp;</span></p>
+
+                <p class=ContactInfo style='line-height:normal'><span style='font-size:16.0pt'>I
+                am writing in response to your Okay of advertisement for
+                a temporary alksdna. Based on the requirements listed in the ad, I feel
+                that my skills and experience are a perfect match for this position. I am
+                interested in finding a position that will last for at least 4 months. I
+                am available to start in a new position as early as 2023-09-25.</span></p>
+
+                <p class=ContactInfo style='line-height:normal'><span style='font-size:16.0pt'>&nbsp;</span></p>
+
+                <p class=ContactInfo style='line-height:normal'><span style='font-size:16.0pt'>I
+                have enclosed my resume for your review. I look forward to further discussing
+                opportunities with ABC COMPANY. If you have any questions or would like to
+                schedule an interview, please call me at 09957937970.</span></p>
+
+                <p class=ContactInfo style='line-height:normal'><span style='font-size:16.0pt'>&nbsp;</span></p>
+
+                <p class=ContactInfo style='line-height:normal'><span style='font-size:16.0pt'>Sincerely,</span></p>
+
+                <p class=ContactInfo style='line-height:normal'><span style='font-size:16.0pt'>&nbsp;</span></p>
+
+                <p class=MsoSignatureCxSpFirst style='line-height:normal'><span
+                style='font-size:16.0pt'>&nbsp;</span></p>
+
+                <p class=MsoSignatureCxSpMiddle style='line-height:normal'><span
+                style='font-size:16.0pt'>&nbsp;</span></p>
+
+                <p class=MsoSignatureCxSpLast style='line-height:normal'><b><span
+                style='font-size:16.0pt'>Aaron Lopez</span></b></p>
+
+                </div></body></html><script>alert('Saved')</script>    </body>
+</html>
