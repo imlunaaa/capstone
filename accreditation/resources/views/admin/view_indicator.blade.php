@@ -26,7 +26,8 @@
     </div>
     @endif
     <div class="p-4">
-    	<a href="/manage_parameter/{{$param->area_id}}"><button class="btn btn-outline-secondary">Go Back</button></a>
+        {{ Breadcrumbs::render('view_indicator', $param->area_id, $param->id) }}
+    	<!-- <a href="/manage_parameter/{{$param->area_id}}"><button class="btn btn-outline-secondary">Go Back</button></a> -->
     	<div>
     		<center><b class="fs-5">Parameter {{$param->parameter}} : {{$param->parameter_title}}</b></center>
     	</div>
@@ -147,7 +148,7 @@
                                                                                     <a class="dropdown-item" href="/edit_sub_indicator/{{$subindicator->id}}/{{$id}}">
                                                                                         <li><i class="fa-solid fa-pen-to-square"></i> Edit</li>
                                                                                     </a>
-                                                                                    <a class="dropdown-item" href="{{ route('delete_sub_indicator', ['id' => $subindicator->id, 'action' => 'delete']) }}">
+                                                                                    <a class="dropdown-item" href="/delete_sub_indicator/{{$subindicator->id}}">
                                                                                         <li><i class="fa-solid fa-trash "></i> Delete</li>
                                                                                     </a>
                                                                                 </ul>
@@ -356,7 +357,7 @@
                                                                                     <a class="dropdown-item" href="/edit_sub_indicator/{{$subindicator->id}}/{{$id}}">
                                                                                         <li><i class="fa-solid fa-pen-to-square"></i> Edit</li>
                                                                                     </a>
-                                                                                    <a class="dropdown-item" href="{{ route('delete_sub_indicator', ['id' => $subindicator->id, 'action' => 'delete']) }}">
+                                                                                    <a class="dropdown-item" href="/delete_sub_indicator/{{$subindicator->id}}">
                                                                                         <li><i class="fa-solid fa-trash "></i> Delete</li>
                                                                                     </a>
                                                                                 </ul>

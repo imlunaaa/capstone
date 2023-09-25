@@ -47,7 +47,7 @@
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Add Member</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
-                  <form action="{{ Route('add_members') }}" method="POST">
+                  <form action="/add_member" method="POST">
                         <div class="modal-body">
                             @csrf
                             <div class="row py-2">
@@ -141,7 +141,7 @@
                         @if(Auth::user()->user_type == 'user')
                         <a>
                         @else
-                        <a href="/manage_member/delete/{{$member->mid}}">
+                        <a href="/remove_member/{{$member->mid}}">
                         @endif
                             <button class="btn btn-outline-danger" @if(Auth::user()->user_type == 'user' && $roles->isCoordinator != 1) disabled @endif >
                                 Remove <i class="fa-solid fa-user-minus"></i>

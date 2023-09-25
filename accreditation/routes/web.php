@@ -104,7 +104,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('edit_program_level/{id}', [ProgramLevelController::class, 'edit']);
     Route::post('edit_program_level/{id}', [ProgramLevelController::class, 'update']);
     
-    Route::get('view_indicator/{action}/{id}', [SubIndicatorController::class, 'destroy'])->name('delete_sub_indicator');
+    Route::get('delete_sub_indicator/{id}', [SubIndicatorController::class, 'destroy']);
 
     Route::post('add_sub_indicator', [SubIndicatorController::class, 'store'])->name('add_sub_indicator');
     Route::get('edit_sub_indicator/{id}/{pid}', [SubIndicatorController::class, 'edit']);
@@ -135,8 +135,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('view_indicator_areachair/{id}', [IndicatorController::class, 'index']);
 
     Route::get('manage_member/{id}', [MemberController::class, 'show'])->name('admin.manage_member.show');
-    Route::post('manage_member', [MemberController::class, 'store'])->name('add_members');
-    Route::get('manage_member/{action}/{id}', [MemberController::class, 'destroy'])->name('delete_members');
+    Route::post('add_member', [MemberController::class, 'store']);
+    Route::get('remove_member/{id}', [MemberController::class, 'destroy']);
     Route::post('update_role/{id}', [MemberController::class, 'update']);
 
     Route::get('view_files_indicator/{indicator_id}/{paramter_id}', [IndicatorFileController::class, 'index']);

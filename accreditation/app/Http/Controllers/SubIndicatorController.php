@@ -137,7 +137,7 @@ class SubIndicatorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($action, $id)
+    public function destroy($id)
     {
         //
         $subindicator = SubIndicator::find($id);
