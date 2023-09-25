@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Parameter {{$param[0]->parameter}} Indicators
+            Parameter {{$param->parameter}} Indicators
         </h2>
     </x-slot>
     @if(session('success'))
@@ -28,7 +28,7 @@
     <div class="p-4">
         <a href="/parameters"><button class="btn btn-outline-secondary">Go Back</button></a>
         <div>
-            <center><b class="fs-5">Parameter {{$param[0]->parameter}} : {{$param[0]->parameter_title}}</b></center>
+            <center><b class="fs-5">Parameter {{$param->parameter}} : {{$param->parameter_title}}</b></center>
         </div>
 
         @if(sizeof($indicators))

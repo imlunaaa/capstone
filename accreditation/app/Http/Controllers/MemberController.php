@@ -11,12 +11,12 @@ use App\Models\User;
 use App\Models\Area;
 use App\Models\AccreditationArea;
 use DB;
+use Session;
+use Log;
 
 class Roles
 {
     public $isCoordinator;
-    public $isAreachair;
-    public $isAreamember;
     public $isExternal;
     public $isInternal;
 }
@@ -91,44 +91,101 @@ class MemberController extends Controller
     public function show($id)
     {
         //
-        $uid = Auth::id();
-        $members = Member::join('users', 'members.user_id',  '=', 'users.id')->select('users.firstname AS fname', 'users.lastname AS lname', 'members.user_id AS uid', 'members.id AS mid', 'users.*', 'members.*')->where('accreditation_id', $id)->OrderBy('lastname')->get();
-        $users = DB::select("SELECT users.*, users.id as user_id, campuses.id as campus_id, campuses.name as campus_name, programs.program as program
-        FROM users
-        INNER JOIN campuses ON users.campus_id = campuses.id
-        INNER JOIN programs ON users.program_id = programs.id
-        WHERE user_type != 'admin'
-        AND NOT EXISTS (
-            SELECT * FROM members
-            WHERE accreditation_id = ?
-            AND members.user_id = users.id
-        )
-        ORDER BY lastname ASC;
-        ", [$id]);
+        $uid = Auth::user()->id; // Assuming 'id' is the user identifier
+        Log::info("User ID: $uid");
 
-        $program_id = Accreditation::join('program_levels', 'accreditations.program_level_id', '=', 'program_levels.id')->join('programs', 'program_levels.program_id', '=', 'programs.id')->select('programs.id as prog_id')->where('accreditations.id', $id)->first();
+        $members = Member::join('users', 'members.user_id',  '=', 'users.id')
+        ->select('users.firstname AS fname', 'users.lastname AS lname', 'members.user_id AS uid', 'members.id AS mid', 'users.*', 'members.*')
+        ->where('accreditation_id', $id)
+        ->OrderBy('lastname')
+        ->get();
 
-        $acc_areas = Area::join('instruments', 'areas.instrument_id', '=', 'instruments.id')->join('programs', 'instruments.program_id', '=', 'programs.id')->join('accreditation_areas', 'areas.id', '=', 'accreditation_areas.area_id')->select('areas.*', 'areas.id as aid', 'instruments.*', 'accreditation_areas.id as acc_areaId')->where('instruments.program_id', $program_id->prog_id)->where('accreditation_areas.accreditation_id', $id)->OrderBy('areas.area_name')->get();
+        $users = DB::table('users')
+        ->select('users.*', 'users.id as user_id', 'campuses.id as campus_id', 'campuses.name as campus_name', 'programs.program as program')
+        ->join('campuses', 'users.campus_id', '=', 'campuses.id')
+        ->join('programs', 'users.program_id', '=', 'programs.id')
+        ->where('user_type', '!=', 'admin')
+        ->whereNotExists(function ($query) use ($id) {
+            $query->select(DB::raw(1))
+                ->from('members')
+                ->whereRaw('members.user_id = users.id')
+                ->where('accreditation_id', '=', $id);
+        })
+        ->orderBy('lastname', 'ASC')
+        ->get();
+
+
+
+        $accreditation = Accreditation::join('program_levels', 'accreditations.program_level_id', '=', 'program_levels.id')->join('programs', 'program_levels.program_id', '=', 'programs.id')->select('programs.id as prog_id', 'accreditations.*')->where('accreditations.id', $id)->first();
+
+        $acc_areas = Area::join('instruments', 'areas.instrument_id', '=', 'instruments.id')
+        ->join('programs', 'instruments.program_id', '=', 'programs.id')
+        ->join('accreditation_areas', 'areas.id', '=', 'accreditation_areas.area_id')
+        ->select('areas.*', 'areas.id as aid', 'instruments.*', 'accreditation_areas.id as acc_areaId')
+        ->where('instruments.program_id', $accreditation->prog_id)
+        ->where('accreditation_areas.accreditation_id', $id)
+        ->OrderBy('areas.area_name')
+        ->get();
+        $acc_areasId = $acc_areas->pluck('id');
+
         
-        $areas = Area::join('instruments', 'areas.instrument_id', '=', 'instruments.id')->join('programs', 'instruments.program_id', '=', 'programs.id')->leftjoin('accreditation_areas', 'areas.id', '=', 'accreditation_areas.area_id')->select('areas.*', 'areas.id as aid', 'instruments.*')->where('instruments.program_id', $program_id->prog_id)->OrderBy('areas.area_name')->get();
+        $areas = Area::join('instruments', 'areas.instrument_id', '=', 'instruments.id')
+        ->join('programs', 'instruments.program_id', '=', 'programs.id')
+        ->leftJoin('accreditation_areas', function ($join) use ($id) {
+            $join->on('areas.id', '=', 'accreditation_areas.area_id')
+                ->where('accreditation_areas.accreditation_id', $id);
+        })
+        ->select('areas.*', 'areas.id as aid', 'instruments.*', 'accreditation_areas.id as acc_areaId')
+        ->where('instruments.program_id', $accreditation->prog_id)
+        ->whereNull('accreditation_areas.id') // Exclude areas that have an entry in accreditation_areas
+        ->orderBy('areas.area_name')
+        ->get();
 
-        $roles = new Roles();
-        if(Auth::user()->user_type == 'user'){
-            $member = Member::select('*')->where('user_id', $uid)->first();
-            $roles->isCoordinator= $member->isCoordination;
-            $roles->isExternal = $member->isExternal;
-            $roles->isInternal = $member->isInternal;
+
+        $roles = (object) array(
+            'isCoordinator' => 0,
+            'isExternal' => 0,
+            'isInternal' => 0,
+        );
+
+        if (Auth::user()->user_type == 'user') {
+            $member = Member::select()->where('user_id', $uid)->first();
+
+            //dd($member);
+            
+            if ($member) {
+                Log::info("Member found: isCoordinator=$member->isCoordination, isExternal=$member->isExternal, isInternal=$member->isInternal");
+                $roles->isCoordinator = $member->isCoordinator;
+                $roles->isExternal = $member->isExternal;
+                $roles->isInternal = $member->isInternal;
+            } else {
+                Log::info("Member not found for user ID: $uid");
+            }
         }
 
-        $area_members = $result = DB::table('area_members')
-        ->join('users', 'area_members.user_id', '=', 'users.id')
-        ->select('users.firstname AS fname', 'users.lastname AS lname', 'users.*', 'area_members.*')
+
+        $area_members = AreaMember::join('users', 'area_members.user_id', '=', 'users.id')
+        ->select('users.firstname AS fname', 'users.lastname AS lname', 'users.*', 'area_members.*', 'area_members.id as amId')
         ->where('area_members.accreditation_id', $id)
         ->get();
 
-        $unfilteredUser = User::join('campuses', 'users.campus_id', '=', 'campuses.id')->join('programs', 'users.program_id', '=', 'programs.id')->select('users.*', 'users.id as user_id', 'campuses.id as campus_id', 'campuses.name as campus_name', 'programs.program as program')->where('user_type', '!=', 'admin')->get();
+        $unfilteredUser = User::join('campuses', 'users.campus_id', '=', 'campuses.id')
+        ->join('programs', 'users.program_id', '=', 'programs.id')
+        ->select('users.*', 'users.id as user_id', 'campuses.id as campus_id', 'campuses.name as campus_name', 'programs.program as program')
+        ->where('user_type', '!=', 'admin')
+        ->get();
 
-        return view('admin.manage_member')->with('members', $members)->with('id', $id)->with('users', $users)->with('roles', $roles)->with('acc_areas', $acc_areas)->with('areas', $areas)->with('unfilteredUser', $unfilteredUser)->with('area_members',$area_members);
+
+        return view('admin.manage_member')
+        ->with('members', $members)
+        ->with('id', $id)
+        ->with('users', $users)
+        ->with('roles', $roles)
+        ->with('acc_areas', $acc_areas)
+        ->with('areas', $areas)
+        ->with('unfilteredUser', $unfilteredUser)
+        ->with('area_members',$area_members)
+        ->with('accreditation', $accreditation);
     }
 
     public function addArea(Request $request)
@@ -188,8 +245,6 @@ class MemberController extends Controller
         //
         $mid = $request->input('id');
         $member = Member::where('id', $id)->update([
-            'isAreachair' => $request->input('areachair') == 0 ? 1 : 0,
-            'isAreamember' => $request->input('areachair') == 1 ? 1 : 0,
             'isExternal' => $request->has('external') ? 1 : 0,
             'isInternal' => $request->has('internal') ? 1 : 0,
             'isCoordinator' => $request->has('coordinator') ? 1 : 0,

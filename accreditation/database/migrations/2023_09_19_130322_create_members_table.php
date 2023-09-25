@@ -20,8 +20,6 @@ return new class extends Migration
             $table->foreign('accreditation_id')->references('id')->on('accreditations')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->smallInteger('isMember')->default('1');
-            $table->smallInteger('isAreachair')->default('0');
-            $table->smallInteger('isAreamember')->default('0');
             $table->smallInteger('isExternal')->default('0');
             $table->smallInteger('isInternal')->default('0');
             $table->smallInteger('isCoordinator')->default('0');

@@ -25,6 +25,7 @@
         </div>
     @endif
     <div class="p-4">
+        {{ Breadcrumbs::render('Instrument') }}
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCampusModal">Add Instrument</button>
         <!-- Modal -->
         <div class="modal fade" id="addCampusModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -70,7 +71,7 @@
                     <tr>
                         <td>{{$instrument->ins_id}}</td>
                         <td>{{$instrument->program}}</td>
-                        <td><a href="view_areas/{{$instrument->ins_id}}"><button class="btn btn-outline-primary">View Areas</button></a></td>
+                        <td><a href="manage_areas/{{$instrument->ins_id}}"><button class="btn btn-outline-primary">View Areas</button></a></td>
                         <td><a href="area_list/{{$instrument->ins_id}}" onclick="return confirm('You are about delete this data')"><button class="btn btn-outline-danger">Delete</button></a></td>
                     </tr>
                 @empty

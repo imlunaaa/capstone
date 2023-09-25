@@ -22,6 +22,5 @@ class Admin
         }
 
         abort(401);
-        
     }   
 }

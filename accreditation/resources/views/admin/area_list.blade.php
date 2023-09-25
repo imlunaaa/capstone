@@ -15,6 +15,7 @@
             {{ session('error') }}
         </div>
     @endif
+
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -25,7 +26,7 @@
         </div>
     @endif
     <div class="p-4">
-        <a href="/instrument_list"><button class="btn btn-outline-secondary">Go Back</button></a>
+        {{ Breadcrumbs::render('manage_areas', $instrument->id) }}
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCampusModal">Add Area</button>
     <!-- Modal -->
     <div class="modal fade" id="addCampusModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

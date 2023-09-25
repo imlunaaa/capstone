@@ -17,30 +17,20 @@
     @endif
 
     @if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
     @endif
     <div class="p-4">
-        <a href="/view_areas/{{$areas->instrument_id}}"><button class="btn btn-outline-secondary">Go Back</button></a>
+        {{ Breadcrumbs::render('manage_parameter', $areas->instrument_id) }}
         <div class="row justify-content-between">
             <div class="col-4">
                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCampusModal">Add Parameter</button>
             </div>
-            <!-- <div class="col-4">
-                <form method="get" action="/parameter_list">
-                   <select name="area" style="margin-top: 0.25rem; width: 50%; border: 1px solid #ccc;">
-                        <option selected disabled value="0">Filter Area</option>
-                        <option value="">All</option>
-
-                    </select> 
-                    <input type="submit" name="" value="Filter" class="btn btn-outline-primary">
-                </form>
-            </div> -->
         </div>
     <!-- Modal -->
     <div class="modal fade" id="addCampusModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

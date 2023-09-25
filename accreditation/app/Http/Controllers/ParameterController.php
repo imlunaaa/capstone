@@ -18,19 +18,36 @@ class ParameterController extends Controller
     public function index(Request $request, $id)
     {
         //
-        //$parameters = Parameter::join('areas', 'parameters.area_id', '=', 'areas.id')->Select('parameters.id AS paramID', 'parameters.*', 'areas.*')->where('areas.id', $aid)->OrderBy('parameters.parameter')
         $user_id = Auth::id();
-        // $parameters = Parameter::join('areas', 'parameters.area_id', '=', 'areas.id')->Select('parameters.id AS paramID', 'parameters.*', 'areas.*')->OrderBy('areas.area_name')->OrderBy('parameters.parameter')->when($request->area, function ($query) use ($request) {
-        //         $query->where('area_id', $request->area);
-        //     })->paginate(10);
-        $areas = Area::select()->OrderBy('area_name')->where('id', $id)->first();
-        $parameters = Parameter::join('areas', 'parameters.area_id', '=', 'areas.id')->Select('parameters.id AS paramID', 'parameters.*', 'areas.*')->OrderBy('areas.area_name')->OrderBy('parameters.parameter')->where('area_id', $id)->paginate(10);
         
-        if(Auth::user()->user_type == 'admin'){
-            return view('admin.parameter_list')->with('parameters', $parameters)->with('areas', $areas)->with('request', $request);
+        $areas = Area::select()
+        ->OrderBy('area_name')
+        ->where('id', $id)
+        ->first();
+
+        $parameters = Parameter::join('areas', 'parameters.area_id', '=', 'areas.id')
+        ->select('parameters.id AS paramID', 'parameters.*', 'areas.*')
+        ->orderBy('areas.area_name')
+        ->orderBy('parameters.parameter')
+        ->where('area_id', $id)
+        ->paginate(10);
+
+
+        
+        if(Auth::user()->user_type == 'admin')
+        {
+            return view('admin.parameter_list')
+            ->with('parameters', $parameters)
+            ->with('areas', $areas)
+            ->with('request', $request)
+            ->with('id', $id);
         }
-        if(Auth::user()->user_type == 'user' || Auth::user()->isAreamember == 1){
-            return view('area chair.parameters')->with('parameters', $parameters)->with('areas', $areas)->with('request', $request);
+        if(Auth::user()->user_type == 'user'){
+            return view('area chair.parameters')
+            ->with('parameters', $parameters)
+            ->with('areas', $areas)
+            ->with('request', $request)
+            ->with('id', $id);
         }
         
     }

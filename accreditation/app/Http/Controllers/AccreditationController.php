@@ -9,6 +9,8 @@ use App\Models\ProgramLevel;
 use App\Models\Campus;
 use App\Models\Program;
 use App\Models\Accreditation;
+use App\Models\Area;
+use App\Models\Instrument;
 
 
 class AccreditationController extends Controller
@@ -24,14 +26,30 @@ class AccreditationController extends Controller
         $user_id = Auth::id();
         $programLevels = ProgramLevel::join('programs', 'program_levels.program_id', '=', 'programs.id')->join('campuses', 'program_levels.campus_id', '=', 'campuses.id')->select('program_levels.*', 'program_levels.id as plID',  'campuses.*', 'campuses.name AS cname', 'programs.program AS prog', 'programs.*')->get();
         $campuses = Campus::select()->get();
+
         $accreditations = [];
         if(Auth::user()->user_type == "admin"){
-            $accreditations = Accreditation::join('program_levels', 'accreditations.program_level_id', '=', 'program_levels.id')->join('programs', 'program_levels.program_id', '=', 'programs.id')->join('campuses', 'program_levels.campus_id', '=', 'campuses.id')->select('program_levels.*', 'program_levels.id as plID', 'program_levels.level as prog_level',  'campuses.*', 'campuses.name AS cname', 'programs.program AS prog', 'programs.*', 'accreditations.*')->get();
+            $accreditations = Accreditation::join('program_levels', 'accreditations.program_level_id', '=', 'program_levels.id')->join('programs', 'program_levels.program_id', '=', 'programs.id')->join('campuses', 'program_levels.campus_id', '=', 'campuses.id')->select('program_levels.*', 'program_levels.id as plID', 'program_levels.level as prog_level',  'campuses.*', 'campuses.name AS cname', 'programs.program AS prog', 'programs.id AS prog_id', 'programs.*', 'accreditations.*')->get();
         }else{
-            $accreditations = Accreditation::join('program_levels', 'accreditations.program_level_id', '=', 'program_levels.id')->join('programs', 'program_levels.program_id', '=', 'programs.id')->join('campuses', 'program_levels.campus_id', '=', 'campuses.id')->join('members', 'accreditations.id', '=', 'members.accreditation_id')->select('program_levels.*', 'program_levels.id as plID', 'program_levels.level as prog_level',  'campuses.*', 'campuses.name AS cname', 'programs.program AS prog', 'programs.*', 'accreditations.*')->where('members.user_id', $user_id)->get();
+            $accreditations = Accreditation::join('program_levels', 'accreditations.program_level_id', '=', 'program_levels.id')->join('programs', 'program_levels.program_id', '=', 'programs.id')->join('campuses', 'program_levels.campus_id', '=', 'campuses.id')->join('members', 'accreditations.id', '=', 'members.accreditation_id')->select('program_levels.*', 'program_levels.id as plID', 'program_levels.level as prog_level',  'campuses.*', 'campuses.name AS cname', 'programs.program AS prog', 'programs.id AS prog_id', 'programs.*', 'accreditations.*')->where('members.user_id', $user_id)->get();
         }
         
         return view('admin.manage_accreditation')->with('accreditations', $accreditations)->with('programLevels', $programLevels)->with('campuses', $campuses);
+    }
+
+    public function showAreas($id)
+    {
+        $accreditation = Accreditation::join('program_levels', 'accreditations.program_level_id', '=', 'program_levels.id')->join('programs', 'program_levels.program_id', '=', 'programs.id')->select('programs.id as prog_id', 'accreditations.*')->where('accreditations.id', $id)->first();
+        $instrument = Instrument::join('programs', 'instruments.program_id', '=', 'programs.id')->select('programs.id as prog_id', 'instruments.id as ins_id', 'instruments.*', 'programs.*')->where('programs.id', $accreditation->prog_id)->first();
+        $areas = Area::join('instruments', 'areas.instrument_id', '=', 'instruments.id')
+        ->join('programs', 'instruments.program_id', '=', 'programs.id')
+        ->join('accreditation_areas', 'areas.id', '=', 'accreditation_areas.area_id')
+        ->select('areas.*', 'areas.id as aid', 'instruments.*', 'accreditation_areas.id as acc_areaId', 'programs.program as program')
+        ->where('instruments.program_id', $accreditation->prog_id)
+        ->where('accreditation_areas.accreditation_id', $id)
+        ->OrderBy('areas.area_name')
+        ->get();
+        return view('area chair.view_areas')->with('areas', $areas)->with('instrument', $instrument);;
     }
 
     /**

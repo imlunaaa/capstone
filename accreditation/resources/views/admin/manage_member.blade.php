@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('View Members') }}
+            {{$accreditation->accreditation_name}}: {{ __('Members') }}
         </h2>
     </x-slot>
     @if(session('success'))
@@ -101,36 +101,36 @@
             <tbody id="members_table">
                 @forelse($members AS $member)
                 @php
-                    $roles = array();
+                    $member_roles = array();
 
                     if($member->isMember == 1):
-                        array_push($roles, 'Member');
+                        array_push($member_roles, 'Member');
                     endif;
 
                     if($member->isAdmin == 1):
-                        array_push($roles, 'Admin');
+                        array_push($member_roles, 'Admin');
                     endif;
 
                     if($member->isAreachair == 1):
-                        array_push($roles, 'Area Chair');
+                        array_push($member_roles, 'Area Chair');
                     endif;
 
                     if($member->isAreamember == 1):
-                        array_push($roles, 'Area Member');
+                        array_push($member_roles, 'Area Member');
                     endif;
 
                     if($member->isExternal == 1):
-                         array_push($roles, 'External Accreditor');
+                         array_push($member_roles, 'External Accreditor');
                     endif;
 
                     if($member->isInternal == 1):
-                         array_push($roles, 'Internal Accreditor');
+                         array_push($member_roles, 'Internal Accreditor');
                     endif;
                     if($member->isCoordinator == 1):
-                         array_push($roles, 'Coordinator');
+                         array_push($member_roles, 'Coordinator');
                     endif;
 
-                    $role = implode(", ", $roles);
+                    $role = implode(", ", $member_roles);
                 @endphp
                 <tr>
                     <td>
@@ -139,17 +139,17 @@
                     <td>@php echo $role @endphp </td>
                     <td>
                         @if(Auth::user()->user_type == 'user')
-                        <a href="#">
+                        <a>
                         @else
                         <a href="/manage_member/delete/{{$member->mid}}">
                         @endif
-                            <button class="btn btn-outline-danger" @if(Auth::user()->user_type == 'user') disabled @endif >
+                            <button class="btn btn-outline-danger" @if(Auth::user()->user_type == 'user' && $roles->isCoordinator != 1) disabled @endif >
                                 Remove <i class="fa-solid fa-user-minus"></i>
                             </button>
                         </a>
                     </td>
                     <td>
-                        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#roleModal{{$member->mid}}">
+                        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#roleModal{{$member->mid}}" @if(Auth::user()->user_type == 'user' && $roles->isCoordinator != 1) disabled @endif >
                             Roles <i class="fa-solid fa-user"></i>
                         </button>
                     </td>
@@ -185,7 +185,7 @@
                                     </div>
                                     
                                     <div class="form-check">
-                                        <input type="checkbox" id="external" name="external" value="1" class="form-check-input @error('external') is-invalid @enderror" {{$member->isExternal == 1 ? 'checked' : ''}}>
+                                        <input type="checkbox" id="external" name="external" value="1" class="form-check-input @error('external') is-invalid @enderror" {{$member->isExternal == 1 ? 'checked' : ''}} >
                                         <label for="external" class="form-check-label">External Accreditor</label>
                                     </div>
                                     <div id="externalError"  class="invalid-feedback">
@@ -195,7 +195,9 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-outline-primary">Save changes</button>
+                                @if(Auth::user()->user_type == 'admin' || $roles->isCoordinator == 1)  
+                                        <button type="submit" class="btn btn-outline-primary">Save changes</button>
+                                @endif
                             </div>
                         </form>
                     </div>
@@ -219,23 +221,36 @@
         <div class="py-4">
 
         </div>
+        @if(Auth::user()->user_type == 'admin' || $roles->isCoordinator == 1)
         <div class="row">
             <div class="col-4 mx-auto">
                 <center><p class="card-text fs-2">Select Area to Tackle</p></center>
                 <button class="btn btn-outline-secondary w-100" data-bs-toggle="modal" data-bs-target="#areaModal">SELECT AREA</button>
             </div>
         </div>
+        @endif
+        @php
+            $headerColors = ['bg-primary', 'bg-secondary', 'bg-info', 'bg-success', 'bg-warning', 'bg-danger'];
+        @endphp
         <div class="row mx-auto">
-            @forelse($acc_areas AS $area)
+            @forelse($acc_areas AS $index => $area)
+            @php
+                $colorClass = $headerColors[$index % count($headerColors)];
+                $areaMembersInArea = $area_members->where('area_id', $area->aid); // Filter area_members for the current area
+            @endphp
             <div class="col-lg-4 col-md-6 col-sm-12 p-2">
                 <div class="card">
-                    <div class="card-header bg bg-primary">
+                    <div class="card-header bg {{$colorClass}}">
                         <div class="row">
                             <div class="col-11">
                                 <b>{{ $area->area_name }}: {{ $area->area_title }}</b>
                             </div>
                             <div class="col-1 text-end">
-                                <a href="/remove_area/{{$area->acc_areaId}}"><i class="fa-solid fa-xmark fa-lg"></i></a>
+                                @if(Auth::user()->user_type == 'admin' || $roles->isCoordinator == 1)
+                                    <a href="/remove_area/{{$area->acc_areaId}}">
+                                        <i class="fa-solid fa-xmark fa-lg"></i>
+                                    </a>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -245,7 +260,9 @@
                                 <h5 class="card-title">Area Chair/s</h5>
                             </div>
                             <div class="col-4">
-                                <button class="btn btn-outline-primary"  data-bs-toggle="modal" data-bs-target="#addAreaMemberModal{{$area->aid}}">Add Area Char</button>
+                                @if(Auth::user()->user_type == 'admin' || $roles->isCoordinator == 1) 
+                                <button class="btn btn-outline-primary"  data-bs-toggle="modal" data-bs-target="#addAreaMemberModal{{$area->aid}}" >Add Area Char</button>
+                                @endif 
                             </div>
                         </div>
                         <table class="table table-striped">
@@ -260,7 +277,16 @@
                                     @if($member->area_id == $area->aid && $member->member_type == 'chair')
                                     <tr>
                                         <td><b>{{$member->lname}} {{$member->fname}}</b></td>
-                                        <td><button class="btn btn-outline-primary">Type</button></td>
+                                        <td>
+                                            @if(Auth::user()->user_type == 'user' && $roles->isCoordinator != 1) 
+                                            <a>
+                                        @else 
+                                            <a href="/remove_area_member/{{$member->amId}}">
+                                        @endif 
+                                            
+                                                <button class="btn btn-outline-danger" @if(Auth::user()->user_type == 'user' && $roles->isCoordinator != 1) disabled @endif >Remove</button>
+                                            </a>
+                                        </td>
                                     </tr>
                                     @endif
                                 @empty
@@ -288,7 +314,15 @@
                                     @if($member->area_id == $area->aid && $member->member_type == 'member')
                                     <tr>
                                         <td><b>{{$member->lname}} {{$member->fname}}</b></td>
-                                        <td><button class="btn btn-outline-primary">Type</button></td>
+                                        <td>
+                                            @if(Auth::user()->user_type == 'user' && $roles->isCoordinator != 1) <a>
+                                            @else
+                                                <a href="/remove_area_member/{{$member->amId}}">
+                                            @endif 
+                                            
+                                                <button class="btn btn-outline-danger" @if(Auth::user()->user_type == 'user' && $roles->isCoordinator != 1) disabled @endif >Remove</button>
+                                            </a>
+                                        </td>
                                     </tr>
                                     @endif
                                 @empty
@@ -301,54 +335,55 @@
             </div>
             <!-- Modal -->
             <div class="modal fade" id="addAreaMemberModal{{$area->aid}}" tabindex="-1" aria-labelledby="addAreaMemberLabel{{$area->aid}}" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="addAreaMemberLabel{{$area->aid}}">Add Member to {{ $area->area_name }}</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <form action="{{route('add_area_members')}}" method="POST">
-                        <div class="modal-body">
-                            @csrf
-                            <div class="row py-2">
-                                <div class="col">
-                                    <input type="text" name="search" id="search" class="form-control" placeholder="Search">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="addAreaMemberLabel{{$area->aid}}">Add Member to {{ $area->area_name }}</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form action="{{route('add_area_members')}}" method="POST">
+                            <div class="modal-body">
+                                @csrf
+                                <div class="row py-2">
+                                    <div class="col">
+                                        <input type="text" name="search" id="search" class="form-control" placeholder="Search">
+                                    </div>
                                 </div>
+                                <label>Select Member Type</label>
+                                <select name="member_type">
+                                    <option value="chair">Area Chair</option>
+                                    <option value="member">Area Member</option>
+                                </select>
+                                <table>
+                                    <tbody id="user_table" class="list-group list-group-flush">
+                                        @forelse($unfilteredUser as $user)
+                                            @if (!$areaMembersInArea->contains('user_id', $user->id))
+                                                <tr class="list-group-item list-group-item-action list-group-item-light">
+                                                    <td>
+                                                        <div class="form-check">
+                                                            <input type="checkbox" name="members[]" class="form-check-input" value="{{$user->id}}" id="area{{$user->user_id}}{{$area->aid}}" >
+                                                            <label class="form-check-label" for="area{{$user->user_id}}{{$area->aid}}"><b class="fs-5">{{$user->lastname}} {{$user->firstname}}</b> <span class="fs-6">({{$user->campus_name}})</span>
+                                                            <p class="fs-6">{{$user->program}}</p>
+                                                            </label>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endif
+                                        @empty
+                                            <center><a href="/add_users"><i class="fa-solid fa-user-plus"></i> No users, Add Here</a></center>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                                <input type="hidden" name="area_id" value="{{$area->aid}}">
+                                <input type="hidden" name="acc_id" value="{{$id}}">
                             </div>
-                            <label>Select Member Type</label>
-                            <select name="member_type">
-                                <option value="chair">Area Chair</option>
-                                <option value="member">Area Member</option>
-                            </select>
-                            <table>
-                                <tbody id="user_table" class="list-group list-group-flush">
-                                    @forelse($unfilteredUser as $user)
-                                        <tr class="list-group-item list-group-item-action list-group-item-light">
-                                            <td>
-                                                <div class="form-check">
-                                                    <input type="checkbox" name="members[]" class="form-check-input" value="{{$user->id}}" id="area{{$user->id}}" >
-                                                    <label class="form-check-label" for="area{{$user->user_id}}{{$area->aid}}"><b class="fs-5">{{$user->lastname}} {{$user->firstname}}</b> <span class="fs-6">({{$user->campus_name}})</span>
-                                                    <p class="fs-6">{{$user->program}}</p>
-                                                    </label>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <center><a href="/add_users"><i class="fa-solid fa-user-plus"></i> No users, Add Here</a></center>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                            <input type="hidden" name="area_id" value="{{$area->aid}}">
-                            <input type="hidden" name="acc_id" value="{{$id}}">
-                            
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-outline-primary">Save changes</button>
-                        </div>
-                    </form>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-outline-primary">Save changes</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-              </div>
             </div>
             @empty
                 <div class="col-4 py-5 mx-auto">

@@ -13,12 +13,22 @@ class AreaController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
-     */
+     */ 
     public function index($id)
     {
-        $areas = Area::select()->OrderBy('area_name')->where('instrument_id', $id)->get();
-        $instrument = Instrument::join('programs', 'instruments.program_id', '=', 'programs.id')->select('programs.id as prog_id', 'instruments.id as ins_id', 'instruments.*', 'programs.*')->where('instruments.id', $id)->first();
-        return view('admin.area_list')->with('areas', $areas)->with('instrument', $instrument);
+        $areas = Area::select()
+        ->OrderBy('area_name')
+        ->where('instrument_id', $id)
+        ->get();
+
+        $instrument = Instrument::join('programs', 'instruments.program_id', '=', 'programs.id')
+        ->select('programs.id as prog_id', 'instruments.id as ins_id', 'instruments.*', 'programs.*', 'programs.program as program')
+        ->where('instruments.id', $id)
+        ->first();
+
+        return view('admin.area_list')
+        ->with('areas', $areas)
+        ->with('instrument', $instrument);
     }
 
     /**

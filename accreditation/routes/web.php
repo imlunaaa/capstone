@@ -80,13 +80,13 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('edit_program/{id}', [ProgramController::class, 'edit']);
     Route::post('edit_program/{id}', [ProgramController::class, 'update']);
 
-    Route::get('view_areas/{id}', [AreaController::class, 'index']);
+    Route::get('manage_areas/{id}', [AreaController::class, 'index'])->name('manage_areas');
     Route::post('area_list', [AreaController::class, 'store'])->name('area_list');
     Route::get('area_list/{id}', [AreaController::class, 'destroy']);
     Route::get('edit_area/{id}', [AreaController::class, 'edit']);
     Route::post('edit_area/{id}', [AreaController::class, 'update']);
 
-    Route::get('manage_parameter/{id}', [ParameterController::class, 'index']);
+    Route::get('manage_parameter/{id}', [ParameterController::class, 'index'])->name('manage_parameter');
     Route::post('parameter_list', [ParameterController::class, 'store'])->name('parameter_list');
     Route::get('parameter_list/{id}', [ParameterController::class, 'destroy']);
     Route::get('edit_parameter/{id}', [ParameterController::class, 'edit']);
@@ -130,7 +130,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('manage_parameters/{id}', [ParameterController::class, 'index']);
+    Route::get('view_areas/{id}', [AccreditationController::class, 'showAreas']);
+    Route::get('view_parameters/{id}', [ParameterController::class, 'index']);
     Route::get('view_indicator_areachair/{id}', [IndicatorController::class, 'index']);
 
     Route::get('manage_member/{id}', [MemberController::class, 'show'])->name('admin.manage_member.show');
