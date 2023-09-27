@@ -266,7 +266,7 @@ class MemberController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($action, $id)
+    public function destroy( $id)
     {
         //
         $member = Member::find($id);

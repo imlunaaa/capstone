@@ -18,8 +18,10 @@ class UserController extends Controller
     public function index()
     {
         //
-        $users = User::join('campuses', 'users.campus_id', '=', 'campuses.id')->join('programs', 'users.program_id', '=', 'programs.id')
-        ->select('users.*', 'users.id as user_id', 'campuses.id as campus_id', 'campuses.name as campus_name', 'programs.program as program')->OrderBy('lastname')
+        $users = User::join('campuses', 'users.campus_id', '=', 'campuses.id')
+        ->join('programs', 'users.program_id', '=', 'programs.id')
+        ->select('users.*', 'users.id as user_id', 'campuses.id as campus_id', 'campuses.name as campus_name', 'programs.program as program')
+        ->OrderBy('lastname')
         ->get();
 
 

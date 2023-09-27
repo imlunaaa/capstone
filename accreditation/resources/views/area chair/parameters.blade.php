@@ -26,6 +26,7 @@
     </div>
     @endif
     <div class="p-4">
+        {{ Breadcrumbs::render('view_parameters',  $instrument->prog_id) }}
         <table class="table">
         <thead>
             <tr>

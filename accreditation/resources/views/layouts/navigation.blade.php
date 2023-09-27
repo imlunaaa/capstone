@@ -1,15 +1,16 @@
-<nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
+<nav x-data="{ open: false }">
+    <link rel="stylesheet" href="{{ asset('build/assets/css/navigation.css') }}">
 
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
-                
-                
+
+
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                   <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-                       <i class="fa-solid fa-bars fa-xl"></i>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                        <i class="fa-solid fa-bars fa-xl"></i>
                     </button>
                 </div>
 
@@ -22,44 +23,44 @@
             </div>
 
             <!-- Off Canvas SideBar -->
-            <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-                <div class="bg bg-primary">
+            <div class=" offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+                <div class="bg">
                     <div class="mx-auto p-4">
-                        <h2 class="fs-2">Pangasinan State University</h2>
+                        <p>Pangasinan State University</p>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
                 </div>
                 <div class="offcanvas-body">
-                    <ul class="list-group">
-                        <a href="/manage_accreditation">
+                    <ul class="list-group space-y-6">
+                        <a class="accreditation rounded-lg" href="/manage_accreditation">
                             <li class="list-group-item {{ request()->is('manage_accreditation') ? 'active' : '' }}">
-                                <i class="fas fa-user"></i> Accreditation
+                                <i class="fas fa-user"></i> <span>Accreditation</span>
                             </li>
                         </a>
-                        @if(Auth::user()->user_type == 'admin') 
-                        <a href="/user_list">
+                        @if(Auth::user()->user_type == 'admin')
+                        <a class="rounded-lg" href="/user_list">
                             <li class="list-group-item {{ request()->is('user_list') ? 'active' : '' }}">
-                                <i class="fas fa-users"></i> User List
-                            </li> 
-                        </a>
-                        <a href="/add_user">
-                            <li class="list-group-item {{ request()->is('add_user') ? 'active' : '' }}">
-                                <i class="fas fa-user-plus"></i> Add User
+                                <i class="fas fa-users"></i> <span>User List</span>
                             </li>
                         </a>
-                        <li class="list-group-item {{ request()->is('campus_list') ? 'active' : '' }}">
-                            <a href="/campus_list">
-                                <i class="fas fa-university"></i> Campuses
-                            </a>
-                        </li>
-                        <li class="list-group-item {{ request()->is('program_list') ? 'active' : '' }}">
-                            <a href="/program_list">
-                                <i class="fas fa-book"></i> Programs
-                            </a>
-                        </li>
-                        <a href="/instrument_list">
+                        <a class="rounded-lg" href="/add_user">
+                            <li class=" list-group-item {{ request()->is('add_user') ? 'active' : '' }}">
+                                <i class="fas fa-user-plus"></i> <span>Add User</span>
+                            </li>
+                        </a>
+                        <a class="rounded-lg" href="/campus_list">
+                            <li class="list-group-item {{ request()->is('campus_list') ? 'active' : '' }}">
+                                <i class="fas fa-university"></i> <span>Campuses</span>
+                            </li>
+                        </a>
+                        <a class="rounded-lg" href="/program_list">
+                            <li class="list-group-item {{ request()->is('program_list') ? 'active' : '' }}">
+                                <i class="fas fa-book"></i> <span>Programs</span>
+                            </li>
+                        </a>
+                        <a class="rounded-lg" href="/instrument_list">
                             <li class="list-group-item {{ request()->is('instrument_list') ? 'active' : '' }}">
-                                <i class="fa-solid fa-drum-steelpan"></i> Instruments
+                                <i class="fa-solid fa-drum-steelpan"></i> <span>Instruments</span>
                             </li>
                         </a>
                         <!-- <a href="/area_list">
@@ -72,13 +73,14 @@
                                 <i class="fas fa-cogs"></i> Parameter Management
                             </li>
                         </a> -->
-                        <a href="/program_level_list">
+                        <a class="rounded-lg" href="/program_level_list">
                             <li class="list-group-item {{ request()->is('program_level_list') ? 'active' : '' }}">
-                                <i class="fas fa-file-code"></i> Program Level Management
+                                <i class="fas fa-file-code"></i> <span>Program Level Management</span>
                             </li>
                         </a>
-                        <a href="/indicator_category_list"><li class="list-group-item {{ request()->is('indicator_category_list') ? 'active' : '' }}">
-                                <i class="fa-brands fa-confluence"></i> Indicator Category Management
+                        <a class="rounded-lg" href="/indicator_category_list">
+                            <li class="list-group-item {{ request()->is('indicator_category_list') ? 'active' : '' }}">
+                                <i class="fa-brands fa-confluence"></i> <span>Indicator Category Management</span>
                             </li>
                         </a>
                         @endif
@@ -110,8 +112,7 @@
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
 
-                            <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
+                            <x-dropdown-link :href="route('logout')" onclick="event.preventDefault();
                                                 this.closest('form').submit();">
                                 {{ __('Log Out') }}
                             </x-dropdown-link>
@@ -156,8 +157,7 @@
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
 
-                    <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
+                    <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault();
                                         this.closest('form').submit();">
                         {{ __('Log Out') }}
                     </x-responsive-nav-link>

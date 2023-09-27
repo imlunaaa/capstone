@@ -36,7 +36,7 @@
                             @csrf
                             <input type="hidden" name="indicator_id" value="{{$indicator_id}}">
                             <input type="hidden" name="parameter_id" value="{{$parameter_id}}">
-                            <input type="file" name="files[]" class="form-control @error('files') is-invalid @enderror" value="{{@old('files')}}" multiple><br>
+                            <input type="file" name="files[]" class="form-control @error('files') is-invalid @enderror" value="{{@old('files[]')}}" multiple accept="image/*,video/*,.pdf"><br>
                             <input type="submit" class="btn btn-outline-success" value="Upload">
                         </form>
                     </div>

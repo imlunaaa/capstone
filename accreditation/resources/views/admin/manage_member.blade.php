@@ -47,7 +47,7 @@
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Add Member</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
-                  <form action="{{ Route('add_members') }}" method="POST">
+                  <form action="/add_member" method="POST">
                         <div class="modal-body">
                             @csrf
                             <div class="row py-2">
@@ -141,7 +141,7 @@
                         @if(Auth::user()->user_type == 'user')
                         <a>
                         @else
-                        <a href="/manage_member/delete/{{$member->mid}}">
+                        <a href="/remove_member/{{$member->mid}}">
                         @endif
                             <button class="btn btn-outline-danger" @if(Auth::user()->user_type == 'user' && $roles->isCoordinator != 1) disabled @endif >
                                 Remove <i class="fa-solid fa-user-minus"></i>
@@ -240,7 +240,7 @@
             @endphp
             <div class="col-lg-4 col-md-6 col-sm-12 p-2">
                 <div class="card">
-                    <div class="card-header bg {{$colorClass}}">
+                    <div class="card-header bg {{$colorClass}} bg-opacity-50">
                         <div class="row">
                             <div class="col-11">
                                 <b>{{ $area->area_name }}: {{ $area->area_title }}</b>
@@ -274,16 +274,15 @@
                             </thead>
                             <tbody>
                                 @forelse($area_members as $member)
-                                    @if($member->area_id == $area->aid && $member->member_type == 'chair')
+                                    @if($member->area_id == $area->aid && $member->member_type == 'chair' )
                                     <tr>
                                         <td><b>{{$member->lname}} {{$member->fname}}</b></td>
                                         <td>
-                                            @if(Auth::user()->user_type == 'user' && $roles->isCoordinator != 1) 
+                                        @if(Auth::user()->user_type == 'user' && $roles->isCoordinator != 1) 
                                             <a>
                                         @else 
                                             <a href="/remove_area_member/{{$member->amId}}">
                                         @endif 
-                                            
                                                 <button class="btn btn-outline-danger" @if(Auth::user()->user_type == 'user' && $roles->isCoordinator != 1) disabled @endif >Remove</button>
                                             </a>
                                         </td>

@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\Area;
+use App\Models\Parameter;
+use App\Models\ProgramLevel;
 
 // Instrument
 Breadcrumbs::for('Instrument', function ($trail) {
@@ -20,15 +22,23 @@ Breadcrumbs::for('manage_parameter', function ($trail, $id) {
     $trail->push('Parameter', route('manage_parameter', $id));
 });
 
-
-// Home > Blog > [Category]
-Breadcrumbs::for('category', function ($trail, $category) {
-    $trail->parent('blog');
-    $trail->push($category->title, route('category', $category->id));
+// Instrument > [Areas] > [Parameter] > [Indicator]
+Breadcrumbs::for('view_indicator', function ($trail, $id) {
+    $parameter = Parameter::select()->where('id', $id)->first();
+    $trail->parent('manage_parameter', $parameter->area_id);
+    $trail->push('Indicator', route('admin.view_indicator.index', $id));
 });
 
-// Home > Blog > [Category] > [Post]
-Breadcrumbs::for('post', function ($trail, $post) {
-    $trail->parent('category', $post->category);
-    $trail->push($post->title, route('post', $post->id));
+// Area
+Breadcrumbs::for('view_areas', function ($trail, $id) {
+    $trail->push('Areas', route('view_areas', $id));
 });
+
+// Area > [Parameter] 
+Breadcrumbs::for('view_parameters', function ($trail, $id) {
+    //$area = Area::select()->where('instrument_id', $id)->first();
+    $trail->parent('view_areas', $id);
+    $trail->push('Parameter', route('view_parameters', $id));
+});
+
+
