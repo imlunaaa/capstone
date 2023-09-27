@@ -35,7 +35,7 @@
                 @if(Auth::user()->user_type == "admin")
                 <a href="#">
                 @endif
-                <a href="/view_areas/{{$accreditation->id}}">
+                <a href="/view_areas/{{$accreditation->program_level_id}}">
                     <div class="card text-bg-light mb-3 shadow p-3 bg-body rounded" >
                         <div class="card-header bg-transparent fs-3">{{ $accreditation->accreditation_name}}: Level {{ $accreditation->prog_level}}</div>
                         <div class="card-body">

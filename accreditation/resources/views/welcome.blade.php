@@ -20,16 +20,14 @@
         <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
 
         <!-- Fontawesome JS -->
-        <script src="{{ asset('js/all.min.js') }}" defer></script>
+        <script src="{{ asset('js/all.min.js') }}"></script>
+        <script src="{{ asset('js/fontawesome.min.js') }}"></script>
 
-         <!-- Fontawesome Css -->
+        <!-- Fontawesome Css -->
         <link href="{{ asset('css/all.min.css') }}" rel="stylesheet">
-
-         <!-- Fontawesome JS -->
-        <script src="{{ asset('js/fontawesome.min.js') }}" defer></script>
-
-         <!-- Fontawesome Css -->
         <link href="{{ asset('css/fontawesome.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/solid.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/brands.min.css') }}" rel="stylesheet">
         
         <!-- Toastr JS -->
         <script src="{{ asset('js/toastr.min.js') }}" defer></script>

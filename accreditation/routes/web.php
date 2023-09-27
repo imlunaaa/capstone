@@ -130,8 +130,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('view_areas/{id}', [AccreditationController::class, 'showAreas']);
-    Route::get('view_parameters/{id}', [ParameterController::class, 'index']);
+    Route::get('view_areas/{id}', [AreaController::class, 'showAreas'])->name('view_areas');
+    Route::get('view_parameters/{id}', [ParameterController::class, 'index'])->name('view_parameters');
     Route::get('view_indicator_areachair/{id}', [IndicatorController::class, 'index']);
 
     Route::get('manage_member/{id}', [MemberController::class, 'show'])->name('admin.manage_member.show');

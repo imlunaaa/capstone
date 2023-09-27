@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Area;
 use App\Models\Instrument;
+use App\Models\Accreditation;
+use App\Models\ProgramLevel;
 use DB;
 
 class AreaController extends Controller
@@ -29,6 +31,29 @@ class AreaController extends Controller
         return view('admin.area_list')
         ->with('areas', $areas)
         ->with('instrument', $instrument);
+    }
+
+    public function showAreas($id)
+    {
+
+        $programLevel = ProgramLevel::select()->where('id', $id)->first();
+
+        $instrument = Instrument::join('programs', 'instruments.program_id', '=', 'programs.id')
+        ->select('programs.id as prog_id', 'instruments.id as ins_id', 'instruments.*', 'programs.*')
+        ->where('programs.id', $programLevel->program_id)
+        ->first();
+
+
+        $areas = Area::join('instruments', 'areas.instrument_id', '=', 'instruments.id')
+        ->join('programs', 'instruments.program_id', '=', 'programs.id')
+        ->join('accreditation_areas', 'areas.id', '=', 'accreditation_areas.area_id')
+        ->select('areas.*', 'areas.id as aid', 'instruments.*', 'accreditation_areas.id as acc_areaId', 'programs.program as program')
+        ->where('instruments.program_id', $programLevel->program_id)
+        ->where('accreditation_areas.accreditation_id', $id)
+        ->OrderBy('areas.area_name')
+        ->get();
+
+        return view('area chair.view_areas')->with('areas', $areas)->with('instrument', $instrument)->with('id', $id);
     }
 
     /**

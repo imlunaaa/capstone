@@ -25,122 +25,81 @@
                 </ul>
             </div>
         @endif -->
-        <div class="container px-4 my-3">
-            <form method="POST" action="{{ route('add_user') }}" class="p-4 mx-5">
-                <div class="row">
-                    @csrf
-                    <div class="row justify-content-between">
-                        <div class="col">
-                            <label for="firstname" class="form-label">Firstname</label>
-                            <input id="firstname" class="form-control @error('firstname') is-invalid @enderror" type="text" name="firstname" value="{{ old('firstname') }}" autofocus>
-                            <div id="firstnameError" class="invalid-feedback">
-                                @error('firstname')<p>Please enter a firstname.</p>  @enderror
+        <div class="container my-5">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="bg shadow p-4 mb-4 bg-body">
+                        <form method="POST" action="{{ route('add_user') }}">
+                            @csrf
+                            <h4 class="fs-4 text-center mb-4">Add User Form</h4>
+                            <div class="mb-3">
+                                <label for="firstname" class="form-label">Firstname</label>
+                                <input id="firstname" class="form-control @error('firstname') is-invalid @enderror" type="text" name="firstname" value="{{ old('firstname') }}" autofocus>
+                                <div id="firstnameError" class="invalid-feedback">
+                                    @error('firstname')<p>{{ $message }}</p>  @enderror
+                                </div>
                             </div>
-                        </div>
-                         <div class="col">
-                            <label for="lastname" class="form-label">Lastname</label>
-                            <input id="lastname" class="form-control @error('lastname') is-invalid @enderror" type="text" name="lastname" value="{{ old('lastname') }}" autofocus>
-                            <div id="lastnameError" class="invalid-feedback">
-                                @error('lastname') <p>Please enter a lastname.</p> @enderror
+                            <div class="mb-3">
+                                <label for="lastname" class="form-label">Lastname</label>
+                                <input id="lastname" class="form-control @error('lastname') is-invalid @enderror" type="text" name="lastname" value="{{ old('lastname') }}">
+                                <div id="lastnameError" class="invalid-feedback">
+                                    @error('lastname') <p>{{ $message }}</p> @enderror
+                                </div>
                             </div>
-                        </div>
-                    </div>
-
-                    <div style="margin-top: 1rem;">
-                        <label for="campus" class="form-label">Campus</label>
-                        <select name="campus" class="form-select @error('campus') is-invalid @enderror">
-                            <option selected disabled>Select Campus</option>
-                            @forelse($campuses as $campus)
-                            <option value="{{$campus->id}}" {{ @old('campus') == $campus->id ? 'selected':'' }}>{{$campus->name}}</option>
-                            @empty
-                            @endforelse
-                        </select>
-                        <div id="campusError"  class="invalid-feedback">
-                            @error('campus') <p>Please select a campus.</p> @enderror
-                        </div>
-                    </div>
-
-
-                    <div style="margin-top: 1rem;">
-                        <label for="Program">Program</label>
-                        <select name="program" class="form-select  @error('program') is-invalid @enderror">
-                            <option selected disabled>Select Program</option>
-                            @forelse($programs as $program)
-                            <option value="{{$program->id}}" {{ @old('program') == $program->id ? 'selected':'' }}>{{$program->program}}</option>
-                            @empty
-                            @endforelse
-                        </select>
-                        <div id="programError" class="invalid-feedback">
-                            @error('program') <p>Please select a program.</p> @enderror
-                        </div>
-                    </div>
-
-                    <!-- <div class="form-group py-2">
-                        <div class="form-check">
-                            <input type="checkbox" id="areachair" name="areachair" value="1" class="form-check-input @error('areachair') is-invalid @enderror">
-                            <label for="areachair" class="form-check-label">Area Chair</label>
-                        </div>
-                        <div id="programError" class="invalid-feedback">
-                            @error('areachair') <p>Please select a role.</p> @enderror
-                        </div>
-                        
-                        <div class="form-check">
-                            <input type="checkbox" id="areamember" name="areamember" value="1" class="form-check-input @error('areamember') is-invalid @enderror">
-                            <label for="areamember" class="form-check-label">Area Member</label>
-                        </div>
-                        <div id="programError"  class="invalid-feedback">
-                            @error('areamember') <p>Please select a role.</p> @enderror
-                        </div>
-                        
-                        <div class="form-check">
-                            <input type="checkbox" id="external" name="external" value="1" class="form-check-input @error('external') is-invalid @enderror">
-                            <label for="external" class="form-check-label">External</label>
-                        </div>
-                        <div id="programError"  class="invalid-feedback">
-                            @error('external') <p>Please select a role.</p> @enderror
-                        </div>
-
-                        <div class="form-check">
-                            <input type="checkbox" id="internal" name="internal" value="1" class="form-check-input @error('internal') is-invalid @enderror">
-                            <label for="internal" class="form-check-label">Internal</label>
-                        </div>
-                        <div id="programError"  class="invalid-feedback">
-                            @error('internal') <p>Please select a role.</p> @enderror
-                        </div>
-
-                    </div>
- -->
-                    <div style="margin-top: 1rem;" class="row">
-                        <label for="email" class="form-label">Email</label>
-                        <input id="email" class="form-control @error('email') is-invalid @enderror"  type="email" name="email" value="{{ old('email') }}">
-                        <div id="emailError"  class="invalid-feedback">
-                            @error('email') <p>Please enter a email address.</p> @enderror
-                        </div>
-                    </div>
-
-                    <div style="margin-top: 1rem;" class="row">
-                        <label for="password" class="form-label">Password</label>
-                        <input id="password" class="form-control @error('password') is-invalid @enderror"  type="password" name="password">
-                        <div id="passError"  class="invalid-feedback">
-                            @error('password') <p>Please enter a password.</p> @enderror
-                        </div>
-                    </div>
-
-                    <div style="margin-top: 1rem;" class="row">
-                        <label for="password_confirmation" class="form-label">Confirm Password</label>
-                        <input id="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror"  type="password" name="password_confirmation" >
-                        <div id="cpassError"  class="invalid-feedback">
-                            @error('password_confirmation') <p>Please enter a password.</p> @enderror
-                        </div>
-                    </div>
-
-                    <div style="display: flex; align-items: center; justify-content: flex-end; margin-top: 1rem;">
-                        <button style="margin-left: 0.5rem; padding: 0.5rem 1rem; background-color: #6366F1; color: #FFF; border: none; border-radius: 0.375rem; cursor: pointer;">
-                            Register
-                        </button>
+                            <div class="mb-3">
+                                <label for="campus" class="form-label">Campus</label>
+                                <select name="campus" class="form-select @error('campus') is-invalid @enderror">
+                                    <option selected disabled>Select Campus</option>
+                                    @forelse($campuses as $campus)
+                                    <option value="{{$campus->id}}" {{ @old('campus') == $campus->id ? 'selected':'' }}>{{$campus->name}}</option>
+                                    @empty
+                                    @endforelse
+                                </select>
+                                <div id="campusError" class="invalid-feedback">
+                                    @error('campus') <p>{{ $message }}</p> @enderror
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="Program">Program</label>
+                                <select name="program" class="form-select @error('program') is-invalid @enderror">
+                                    <option selected disabled>Select Program</option>
+                                    @forelse($programs as $program)
+                                    <option value="{{$program->id}}" {{ @old('program') == $program->id ? 'selected':'' }}>{{$program->program}}</option>
+                                    @empty
+                                    @endforelse
+                                </select>
+                                <div id="programError" class="invalid-feedback">
+                                    @error('program') <p>{{ $message }}</p> @enderror
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input id="email" class="form-control @error('email') is-invalid @enderror" type="email" name="email" value="{{ old('email') }}">
+                                <div id="emailError" class="invalid-feedback">
+                                    @error('email') <p>{{ $message }}</p> @enderror
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input id="password" class="form-control @error('password') is-invalid @enderror" type="password" name="password">
+                                <div id="passError" class="invalid-feedback">
+                                    @error('password') <p>{{ $message }}</p> @enderror
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password_confirmation" class="form-label">Confirm Password</label>
+                                <input id="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror" type="password" name="password_confirmation">
+                                <div id="cpassError" class="invalid-feedback">
+                                    @error('password_confirmation') <p>{{ $message }}</p> @enderror
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button class="btn btn-outline-primary" type="submit">Add User</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 </x-app-layout>

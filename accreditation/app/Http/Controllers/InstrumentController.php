@@ -17,8 +17,13 @@ class InstrumentController extends Controller
     {
         //
         $programs = Program::select()->get();
-        $instruments = Instrument::join('programs', 'instruments.program_id', '=', 'programs.id')->select('programs.id as prog_id', 'instruments.id as ins_id', 'instruments.*', 'programs.*')->get();
-        return view('admin.instrument_list')->with('programs', $programs)->with('instruments', $instruments);
+        $instruments = Instrument::join('programs', 'instruments.program_id', '=', 'programs.id')
+        ->select('programs.id as prog_id', 'instruments.id as ins_id', 'instruments.*', 'programs.*')
+        ->get();
+
+        return view('admin.instrument_list')
+        ->with('programs', $programs)
+        ->with('instruments', $instruments);
     }
 
     /**

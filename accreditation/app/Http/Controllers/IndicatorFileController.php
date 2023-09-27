@@ -43,16 +43,21 @@ class IndicatorFileController extends Controller
     {
         $uid = Auth::id();
         $rules = [
-            'files' => 'required',
-            'parameter_id' => 'required', // Add validation for parameter_id
-            'indicator_id' => 'required', // Add validation for indicator_id
+            'files' => 'required|array',
+            'files.*' => 'file|max:20480|mimes:jpeg,png,mp4,pdf', // Apply custom_mime_types rule
+            'parameter_id' => 'required',
+            'indicator_id' => 'required',
         ];
 
-        $customMessage = [
+        $customMessages = [
             'required' => 'Please select a file to upload.',
+            'files.*.file' => 'Invalid file format. Please upload a valid file.',
+            'files.*.max' => 'The file size should not exceed 20MB.',
+            'files.*.mimes' => 'Only JPEG, PNG, MP4, and PDF files are allowed.',
         ];
 
-        $this->validate($request, $rules, $customMessage);
+        $this->validate($request, $rules, $customMessages);
+
 
         $parameter_id = $request->input('parameter_id');
         $indicator_id = $request->input('indicator_id');

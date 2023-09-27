@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Parameter;
 use App\Models\Area;
+use App\Models\Instrument;
 use DB;
 
 class ParameterController extends Controller
@@ -17,12 +18,17 @@ class ParameterController extends Controller
      */
     public function index(Request $request, $id)
     {
-        //
+        // 
         $user_id = Auth::id();
         
         $areas = Area::select()
         ->OrderBy('area_name')
         ->where('id', $id)
+        ->first();
+
+        $instrument = Instrument::join('programs', 'instruments.program_id', '=', 'programs.id')
+        ->select('programs.id as prog_id', 'instruments.id as ins_id', 'instruments.*', 'programs.*')
+        ->where('instruments.id', $areas->instrument_id)
         ->first();
 
         $parameters = Parameter::join('areas', 'parameters.area_id', '=', 'areas.id')
@@ -38,6 +44,7 @@ class ParameterController extends Controller
         {
             return view('admin.parameter_list')
             ->with('parameters', $parameters)
+            ->with('instrument', $instrument)
             ->with('areas', $areas)
             ->with('request', $request)
             ->with('id', $id);
@@ -45,6 +52,7 @@ class ParameterController extends Controller
         if(Auth::user()->user_type == 'user'){
             return view('area chair.parameters')
             ->with('parameters', $parameters)
+            ->with('instrument', $instrument)
             ->with('areas', $areas)
             ->with('request', $request)
             ->with('id', $id);
