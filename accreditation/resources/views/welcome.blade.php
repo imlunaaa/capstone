@@ -11,32 +11,18 @@
     <!-- Css -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
-<<<<<<< HEAD
-    <!-- Fonts -->
-    <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-
-    <!-- Bootstrap JS -->
-    <script src="{{ asset('js/bootstrap.bundle.min.js') }}" defer></script>
-
-    <!-- Bootstrap CSS -->
-    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
-
     <!-- Fontawesome JS -->
-    <script src="{{ asset('js/all.min.js') }}" defer></script>
-=======
-        <!-- Fontawesome JS -->
-        <script src="{{ asset('js/all.min.js') }}"></script>
-        <script src="{{ asset('js/fontawesome.min.js') }}"></script>
+    <script src="{{ asset('js/all.min.js') }}"></script>
+    <script src="{{ asset('js/fontawesome.min.js') }}"></script>
 
-        <!-- Fontawesome Css -->
-        <link href="{{ asset('css/all.min.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/fontawesome.min.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/solid.min.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/brands.min.css') }}" rel="stylesheet">
-        
-        <!-- Toastr JS -->
-        <script src="{{ asset('js/toastr.min.js') }}" defer></script>
->>>>>>> 2b451ea77abc13f5423fa295034772614e9a01f3
+    <!-- Fontawesome Css -->
+    <link href="{{ asset('css/all.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/fontawesome.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/solid.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/brands.min.css') }}" rel="stylesheet">
+
+    <!-- Toastr JS -->
+    <script src="{{ asset('js/toastr.min.js') }}" defer></script>
 
     <!-- Fontawesome Css -->
     <link href="{{ asset('css/all.min.css') }}" rel="stylesheet">
